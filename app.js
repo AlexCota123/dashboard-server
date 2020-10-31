@@ -22,7 +22,7 @@ let root = {
 
 app.use(bodyParser.json())
 app.use(cors())
-app.use('graphql', graphqlHTTP({
+app.use('/graphql', graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true
