@@ -9,6 +9,6 @@ app.get('/', (req, res) => {
     res.send("Welcome")
 })
 
-app.listen(5000, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log('vivito y coleando en 5000')
 })
