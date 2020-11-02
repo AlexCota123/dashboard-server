@@ -1,25 +1,95 @@
 import data from '../data/user.json'
+import {User, Project} from '../model/initModels'
 export default {
-    getUsers: () => {
-        return data
-    },
+    Query: {
+        users: async () => {
+            try {
+                let users = await User.findAll()
+                return users
+            } catch (error) {
+                return error
+            }
+        },
+        user: async (obj, {id}, context, info) => {
+            try{
 
-    getUser: (id) => {
-        return data.find(user => user.id === id)
-    },
+                let userData = await User.findOne({where:{
+                    id: id
+                }})
+                return userData
+            } catch (error) {
+                console.log('error: ',error)
+                return error
+            }
 
-    addUser: (user) => {
-        data.push(user)
-        return "OK"
+        },
     },
-    updateUser: (user) => {
-        const index = data.findIndex(userAux => userAux.id === user.id)
-        data[index] = {...data[index], ...user}
-        return index ? "Ok" : "NOT FOUND"
-    },
+    Mutation: {
+        addUser: async (obj,{user}) => {
+            console.log('user: ', user)
+            try {
+                let response = await User.create(user)
+                return response
+            } catch (error) {
+                return error
+            }
 
-    deleteUser: (id) => {
-        data = data.filter(user => user.id !== id)
-        return "OK"
+        },
+        updateUser: async (obj, {user}) => {
+            try {
+                await User.update(user, {
+                    where: {
+                        id: user.id
+                    }
+                })
+
+            } catch (error) {
+                return error
+            }
+        },
+        deleteUser: async (obj, {id}) => {
+            try {
+                Project.destroy({
+                    where: {
+                        id: id
+                    }
+                })
+
+            } catch (error) {
+                return error
+            }
+        },
+        assignProject: async (obj, {projectId, userId}) => {
+            try {
+                let user = await User.findOne({
+                    where: {
+                        id: userId
+                    }
+                })
+                user.addProject(await Project.findOne({
+                    where: {
+                        id: projectId
+                    }
+                }))
+                return user
+            } catch (error) {
+                return error
+            }
+        }
+    }, 
+    User: {
+        projects: async (user) => {
+            try{
+                let response = await User.findOne({
+                    where: {
+                        id: user.id
+                    }
+                })
+                return await response.getProjects()
+            } catch (error) {
+                console.log('error: ', error)
+                return error
+            }
+        }
     }
 }
