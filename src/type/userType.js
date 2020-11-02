@@ -8,9 +8,10 @@ type User {
 }
 
 input UserInput {
+    id: ID!
     name: String!
     lastName: String!
-    age: String!
+    age: Int!
 }
 
 type Query {
