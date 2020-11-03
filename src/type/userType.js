@@ -9,9 +9,9 @@ type User {
 
 input UserInput {
     id: ID!
-    name: String!
-    lastName: String!
-    age: Int!
+    name: String
+    lastName: String
+    age: Int
 }
 
 type Query {

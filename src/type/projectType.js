@@ -1,13 +1,16 @@
 export default `
     type Project {
         id: ID!
-        name: String
+        name: String!
+        description: String!
         users: [User]
     }
 
     input ProjectInput {
-        id: ID!
-        name: String!
+        id: ID
+        name: String
+        description: String
+        users: [User]
     }
     type Query {
         projects: [Project]
