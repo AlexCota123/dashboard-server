@@ -16,6 +16,11 @@ export default class Project extends Model {
                 allowNull: false,
                 field: 'name'
             }, 
+            description: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'name'
+            }
         }, {
             sequelize,
             modelName: 'projects',
