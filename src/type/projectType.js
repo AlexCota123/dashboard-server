@@ -10,7 +10,7 @@ export default `
         id: ID
         name: String
         description: String
-        users: [User]
+        users: [UserInput]
     }
     type Query {
         projects: [Project]
