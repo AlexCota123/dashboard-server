@@ -20,7 +20,7 @@ export default `
     type Mutation {
         addProject(project: ProjectInput!): Project
         updateProject(project: ProjectInput): Project
-        deleteProject(id: ID!): String
+        deleteProject(id: String!): String
     }
 
 `

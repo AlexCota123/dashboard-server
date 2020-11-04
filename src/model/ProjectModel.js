@@ -19,7 +19,7 @@ export default class Project extends Model {
             description: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                field: 'name'
+                field: 'description'
             }
         }, {
             sequelize,

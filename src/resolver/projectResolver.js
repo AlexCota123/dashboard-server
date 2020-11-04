@@ -26,21 +26,46 @@ export default {
     }, 
     Mutation: {
         addProject: async (obj, {project}) => {
+
             try {
-                let response = await Project.create(project)
-                return response
+                
+                let response = await Project.create({...project})
+                if(!!project.users && project.users.length !== 0){
+                    let users = await User.findAll({
+                        where: {
+                            id: project.users.map( user => user.id)
+                        }
+                    })
+                    await response.setUsers(users)
+                }
+                return await response
             } catch (error) {
+                console.log(error)
                 return error
             }
         },
         updateProject: async (obj, {project}) => {
             try {
-                await Project.update(project, {
+                console.log('project: ', project)
+                let users
+                if(!!project.users && project.users.length !== 0){
+                    users = await User.findAll({
+                        where: {
+                            id: project.users.map( user => user.id)
+                        }
+                    })
+                    console.log('users: ', await users)
+                } 
+                let projectResponse = await Project.findOne({
                     where: {
                         id: project.id
                     }
                 })
-
+                projectResponse.name = project.name
+                projectResponse.description = project.description
+                projectResponse.setUsers(users)
+                await projectResponse.save()
+                return projectResponse
             } catch (error) {
                 return error
             }
@@ -52,7 +77,7 @@ export default {
                         id: id
                     }
                 })
-
+                return "OK"
             } catch (error) {
                 return error
             }
@@ -61,7 +86,7 @@ export default {
     Project: {
         users: async (project) => {
             try{
-                console.log('project: ', project)
+                // console.log('project: ', project)
                 let response = await Project.findOne({
                     where: {
                         id: project.id
