@@ -26,10 +26,18 @@ export default {
     },
     Mutation: {
         addUser: async (obj,{user}) => {
-            console.log('user: ', user)
+            
             try {
                 let response = await User.create(user)
-                return response
+                if(!!user.projects && user.projects.length !== 0){
+                    let projects = await Project.findAll({
+                        where: {
+                            id: user.projects.map( project => project.id)
+                        }
+                    })
+                    await response.setProjects(projects)
+                }
+                return await response
             } catch (error) {
                 return error
             }
@@ -37,11 +45,29 @@ export default {
         },
         updateUser: async (obj, {user}) => {
             try {
-                await User.update(user, {
+                let projects = []
+                if(!!user.projects && user.projects.length !== 0){
+                    projects = await Project.findAll({
+                        where: {
+                            id: user.projects.map( project => project.id)
+                        }
+                    })
+                }  
+                let userResponse = await User.findOne({
                     where: {
                         id: user.id
                     }
                 })
+
+                for (let field in user){
+                    if(!Array.isArray(user[field])){
+                        userResponse[field] = user[field]
+                    }
+                }
+
+                user.setProjects(projects)
+                await userResponse.save()
+                return userResponse
 
             } catch (error) {
                 return error

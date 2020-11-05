@@ -8,10 +8,11 @@ type User {
 }
 
 input UserInput {
-    id: ID!
+    id: ID
     name: String
     lastName: String
     age: Int
+    projects: [ProjectInput]
 }
 
 type Query {
@@ -22,6 +23,6 @@ type Query {
 type Mutation {
     addUser(user: UserInput!): User
     updateUser(user: UserInput!): User
-    deleteUser(id: ID!): String
+    deleteUser(id: String!): String
     assignProject(projectId: ID!, userId: ID!): User
 }`

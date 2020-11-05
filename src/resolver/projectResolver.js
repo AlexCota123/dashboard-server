@@ -46,15 +46,13 @@ export default {
         },
         updateProject: async (obj, {project}) => {
             try {
-                console.log('project: ', project)
-                let users
+                let users = []
                 if(!!project.users && project.users.length !== 0){
                     users = await User.findAll({
                         where: {
                             id: project.users.map( user => user.id)
                         }
                     })
-                    console.log('users: ', await users)
                 } 
                 let projectResponse = await Project.findOne({
                     where: {
